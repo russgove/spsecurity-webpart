@@ -24,7 +24,16 @@ export default class SPSecurityService {
   }
   public loadSiteUsers(forceReload: boolean): Promise<ISPSiteUsers> {
     return pnp.sp.web.siteUsers.get().then((response) => {
-      return response;
+      debugger;
+
+      let siteUsers: SPSiteUsers = new SPSiteUsers();
+      for (let row: any in response) {
+        let siteuser: SPSiteUser = new SPSiteUser();
+        siteuser.id = 1;
+        siteuser.name =  "'Koe";
+        ISPSiteUsers.add(siteuser);
+      }
+      return siteUsers;
     }).catch((error) => {
       alert(error);
       return error;

@@ -1,36 +1,37 @@
-import * as React from 'react';
-import * as ReactDom from 'react-dom';
-import spSecurityService from './spsecurityService';
+import * as React from "react";
+import * as ReactDom from "react-dom";
+import spSecurityService from "./spsecurityService";
 import {
   BaseClientSideWebPart,
   IPropertyPaneSettings,
   IWebPartContext,
   PropertyPaneTextField
-} from '@microsoft/sp-client-preview';
+} from "@microsoft/sp-client-preview";
 import {ISPSiteUser, ISPSiteUsers,
-  SPSiteUser, SPSiteUsers} from './spsecurityservice';
+  SPSiteUser, SPSiteUsers} from "./spsecurityservice";
 
-import * as strings from 'mystrings';
-import SpSecurityWebpart, { ISpSecurityWebpartProps } from './components/SpSecurityWebpart';
+import * as strings from "mystrings";
+import SpSecurityWebpart, { ISpSecurityWebpartProps } from "./components/SpSecurityWebpart";
 import { ISpSecurityWebpartWebPartProps,
-  SpSecurityWebpartWebPartProps } from './ISpSecurityWebpartWebPartProps';
+  SpSecurityWebpartWebPartProps } from "./ISpSecurityWebpartWebPartProps";
 
 export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpSecurityWebpartWebPartProps> {
 
   public constructor(context: IWebPartContext) {
     super(context);
+
   }
 
 
   public render(): void {
     debugger;
-    var svc: spSecurityService = new spSecurityService('ss');
+    let svc: spSecurityService = new spSecurityService("ss");
 
     svc.loadSiteUsers(false).then((response) => {
       debugger;
 
       let siteUsers: SPSiteUsers = new SPSiteUsers();
-      siteUsers.value = response.value;
+      siteUsers.value = response;
       let props: SpSecurityWebpartWebPartProps = new SpSecurityWebpartWebPartProps();
       props.description = this.properties.description;
       props.users = siteUsers;
