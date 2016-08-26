@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "name": "spsecurity-webpart-client-side-solution",
+    "id": "d4bce8b4-af36-4189-85a4-7657aac43732",
+    "version": "1.0.0.0"
+  },
+  "paths": {
+    "zippedPackage": "spsecurity-webpart.spapp"
+  }
+}

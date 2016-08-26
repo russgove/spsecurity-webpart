@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../node_modules/@microsoft/sp-module-interfaces/lib/manifestSchemas/jsonSchemas/clientSideComponentManifestSchema.json",
+
+  "id": "e19cba5b-ebf6-433a-8829-eb2f1cad0227",
+  "componentType": "WebPart",
+  "version": "0.0.1",
+  "manifestVersion": 2,
+
+  "preconfiguredEntries": [{
+    "groupId": "e19cba5b-ebf6-433a-8829-eb2f1cad0227",
+    "group": { "default": "Under Development" },
+    "title": { "default": "SpSecurityWebpart" },
+    "description": { "default": "SPSecurity-webpart description" },
+    "officeFabricIconFontName": "Page",
+    "properties": {
+      "description": "SpSecurityWebpart"
+    }
+  }]
+}
