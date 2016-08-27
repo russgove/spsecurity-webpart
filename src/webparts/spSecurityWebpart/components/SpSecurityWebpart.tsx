@@ -22,7 +22,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
                 Welcome to SharePoint!
               </span>
                <p className='ms-font-l ms-fontColor-white'>
-              siteuserds {this.props.users.value.length}
+              siteuserds {this.props.users.length}
 
               </p>
               <p className='ms-font-l ms-fontColor-white'>

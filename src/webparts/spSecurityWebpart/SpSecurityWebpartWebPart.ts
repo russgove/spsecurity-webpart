@@ -7,8 +7,7 @@ import {
   IWebPartContext,
   PropertyPaneTextField
 } from "@microsoft/sp-client-preview";
-import {ISPSiteUser, ISPSiteUsers,
-  SPSiteUser, SPSiteUsers} from "./spsecurityservice";
+import { SPSiteUser, SPSiteGroup} from "./spsecurityservice";
 
 import * as strings from "mystrings";
 import SpSecurityWebpart, { ISpSecurityWebpartProps } from "./components/SpSecurityWebpart";
@@ -30,8 +29,8 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
     svc.loadSiteUsers(false).then((response) => {
       debugger;
 
-      let siteUsers: SPSiteUsers = new SPSiteUsers();
-      siteUsers.value = response;
+      let siteUsers: SPSiteUser[] = [];
+      siteUsers = response;
       let props: SpSecurityWebpartWebPartProps = new SpSecurityWebpartWebPartProps();
       props.description = this.properties.description;
       props.users = siteUsers;

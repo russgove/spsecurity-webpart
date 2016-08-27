@@ -1,10 +1,10 @@
-import {ISPSiteUsers} from './spsecurityservice';
+import {SPSiteUser} from './spsecurityservice';
 export interface ISpSecurityWebpartWebPartProps {
   description: string;
-  users: ISPSiteUsers;
+  users: SPSiteUser[];
 }
 
 export class SpSecurityWebpartWebPartProps implements ISpSecurityWebpartWebPartProps{
   public description: string;
-  public users: ISPSiteUsers;
+  public users: SPSiteUser[];
 }

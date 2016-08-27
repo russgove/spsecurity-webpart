@@ -23,7 +23,8 @@
       "triple-equals": false,
       // remove these:
       "no-unused-variable": false,
-      "prefer-const": false
+      "prefer-const": false,
+      "no-function-expression":false
     }
   }
 }
