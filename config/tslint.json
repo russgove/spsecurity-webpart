@@ -31,8 +31,8 @@
       "no-switch-case-fall-through": true,
       "no-unnecessary-semicolons": true,
       "no-unused-expression": true,
-      "no-unused-imports": true,
-      "no-unused-variable": true,
+     // "no-unused-imports": true,
+     // "no-unused-variable": true,
       "no-unreachable": true,
       "no-use-before-declare": true,
       "no-with-statement": true,
@@ -44,7 +44,7 @@
       "valid-typeof": true,
       "variable-name": false,
       "whitespace": false,
-      "prefer-const": true,
+    // "prefer-const": true,
       "a11y-role": true
     }
   }

@@ -61,7 +61,7 @@ export default class SPSecurityService {
     batch.execute(); //<=== i thought this should return a promise
     let promises: any = [siteGroupsPromise, siteUsersPromise];
 
-    let returnVal: Promise<IPSecurityInfo> = Promise.all(promises).then(function (values: any): any {
+    let returnVal: Promise<IPSecurityInfo> = Promise.all(promises).then((values: any):any=>{
       let spSecurityInfo: SPSecurityInfo = new SPSecurityInfo();
       let x: any = values[0];
       return spSecurityInfo;
