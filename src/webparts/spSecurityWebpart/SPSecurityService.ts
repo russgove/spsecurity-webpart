@@ -1,30 +1,30 @@
 ﻿import pnp from "sp-pnp-js";
 export interface ISPSiteGroup {
-   id: number;
-   isHiddenInUI: boolean;
-   isShareByEmailGuestUse: boolean;
-   isSiteAdmin: boolean;
+  id: number;
+  isHiddenInUI: boolean;
+  isShareByEmailGuestUse: boolean;
+  isSiteAdmin: boolean;
 }
 
-export class SPSiteGroup implements ISPSiteGroup{
+export class SPSiteGroup implements ISPSiteGroup {
   public id: number;
   public isHiddenInUI: boolean;
   public isShareByEmailGuestUse: boolean;
   public isSiteAdmin: boolean;
 }
 export interface ISPSiteUser {
-   name: string;
-   id: number;
+  name: string;
+  id: number;
 }
 export class SPSiteUser implements ISPSiteUser {
   public name: string;
-public   id: number;
+  public id: number;
 }
 export interface IPSecurityInfo {
-   siteUsers: SPSiteUser[];
-   siteGroups: SPSiteGroup[];
+  siteUsers: SPSiteUser[];
+  siteGroups: SPSiteGroup[];
 }
-export class SPSecurityInfo implements IPSecurityInfo{
+export class SPSecurityInfo implements IPSecurityInfo {
   public siteUsers: SPSiteUser[];
   public siteGroups: SPSiteGroup[];
 }
@@ -45,7 +45,7 @@ export default class SPSecurityService {
         siteuser.name = "'Koe";
         siteUsers.push(siteuser);
       }
-     return siteUsers;
+      return siteUsers;
     });
     let siteGroupsPromise: Promise<ISPSiteGroup[]> = pnp.sp.web.inBatch(batch).siteGroups.expand("Users").select("Id", "IsHiddenInUI", "IsShareByEmailGuestUse", "IsSiteAdmin", "IsSiteAdmin").get().then((response) => {
       let siteGroups: SPSiteGroup[] = [];
@@ -61,11 +61,9 @@ export default class SPSecurityService {
     batch.execute(); //<=== i thought this should return a promise
     let promises: any = [siteGroupsPromise, siteUsersPromise];
 
-    let returnVal: Promise<IPSecurityInfo> = Promise.all(promises).then(function (values) {
+    let returnVal: Promise<IPSecurityInfo> = Promise.all(promises).then(function (values: any): any {
       let spSecurityInfo: SPSecurityInfo = new SPSecurityInfo();
-      let x = values[0];
-
-
+      let x: any = values[0];
       return spSecurityInfo;
 
     });
