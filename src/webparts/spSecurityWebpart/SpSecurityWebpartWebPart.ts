@@ -26,11 +26,11 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
     debugger;
     let svc: spSecurityService = new spSecurityService("ss");
 
-    svc.loadSiteUsers(false).then((response) => {
+    svc.loadData(false).then((response) => {
       debugger;
 
       let siteUsers: SPSiteUser[] = [];
-      siteUsers = response;
+      siteUsers = response.siteUsers;
       let props: SpSecurityWebpartWebPartProps = new SpSecurityWebpartWebPartProps();
       props.description = this.properties.description;
       props.users = siteUsers;
