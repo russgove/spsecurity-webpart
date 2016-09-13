@@ -55,11 +55,28 @@ export class SPSiteUser implements ISPSiteUser {
   public name: string;
   public id: number;
 }
+export class SPRoleDefinition implements ISPRoleDefinition {
+  public id: number;
+  public basePermissionss: ISPBasePermissions;
+   public  description: string;
+   public  hidden: boolean;
+   public  name: string;
+
+}
 export class SPSecurityInfo implements IPSecurityInfo {
   public siteUsers: SPSiteUser[];
   public siteGroups: SPSiteGroup[];
   public roleDefinitions: ISPRoleDefinition[];
   public lists: ISPList[];
+  public constructor(){
+
+    this.siteUsers= new Array<SPSiteUser>();
+  this.siteGroups= new Array<SPSiteGroup>();
+  this.roleDefinitions= new Array<SPRoleDefinition>();
+  this.siteUsers= new Array<SPSiteUser>();
+  this.lists= new Array<SPList>();
+
+  }
 }
 export class SPList {
   public title: string;
@@ -70,6 +87,7 @@ export class SPList {
   public itemCount: number;
   public RoleAssignments: ISPRoleAssignment[];
 }
+
 export class SPRoleAssignment {
   public roleDefinitions = [];
   public users = [];
@@ -78,6 +96,7 @@ export class SPRoleAssignment {
 
 
 }
+
 export default class SPSecurityService {
   public siteUrl: string;
 

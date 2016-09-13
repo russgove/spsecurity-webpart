@@ -24,20 +24,13 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
 
   public render(): void {
     debugger;
-    let svc: spSecurityService = new spSecurityService("ss");
 
-    svc.loadData(false).then((response) => {
-      debugger;
+    let props: SpSecurityWebpartWebPartProps = new SpSecurityWebpartWebPartProps();
+    props.description = this.properties.description;
+    const element: React.ReactElement<ISpSecurityWebpartProps> = React.createElement(SpSecurityWebpart, props);
 
-      let siteUsers: SPSiteUser[] = [];
-      siteUsers = response.siteUsers;
-      let props: SpSecurityWebpartWebPartProps = new SpSecurityWebpartWebPartProps();
-      props.description = this.properties.description;
-      props.users = siteUsers;
-      const element: React.ReactElement<ISpSecurityWebpartProps> = React.createElement(SpSecurityWebpart, props);
+    ReactDom.render(element, this.domElement);
 
-      ReactDom.render(element, this.domElement);
-    });
 
 
   }
