@@ -9,13 +9,13 @@ import { ISpSecurityWebpartWebPartProps } from '../ISpSecurityWebpartWebPartProp
 export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps {
 }
 
-export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, {}> {
+export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, SPSecurityInfo> {
   private svc: spSecurityService = new spSecurityService("ss");
   public componentWillMount(): void {
     debugger;
     this.svc.loadData(false).then((response) => {
       debugger;
-      this.setState(response);
+      this.setState(response as SPSecurityInfo );
     });
 
   }
@@ -37,7 +37,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
                 Welcome to SharePoint!
               </span>
               <p className='ms-font-l ms-fontColor-white'>
-                asd {this.state.siteuserds.length}
+                asd {this.state.siteUsers.length}
 
               </p>
               <p className='ms-font-l ms-fontColor-white'>
