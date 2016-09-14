@@ -1,6 +1,6 @@
 ## spsecurity-webpart
 
-This is where you include your web part docs.
+spfx Webpart to show security matrix
 
 ### Building the code
 
