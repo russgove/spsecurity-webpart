@@ -11,7 +11,7 @@ export default class SPSecurityWebpartTableRow extends React.Component<any, any>
   public render(): JSX.Element {
     debugger;
     return (
-      <tr>key={this.state.id}><td>{this.state.title}</td><td>{this.state.id}</td></tr>
+      <tr>key={this.props.list.id}><td>{this.props.list.title}</td><td>{this.props.list.id}</td></tr>
     );
   }
 }
