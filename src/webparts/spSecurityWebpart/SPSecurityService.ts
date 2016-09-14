@@ -124,7 +124,7 @@ export default class SPSecurityService {
       debugger;
       return securityInfo.roleDefinitions;
     });
-    pnp.sp.web.inBatch(batch).lists.expand('RootFolder', 'RoleAssignments', 'RoleAssignments/RoleDefinitionBindings', 'RoleAssignments/Member', 'RoleAssignments/Member/Users', 'RoleAssignments/Member/Groups', 'RoleAssignments/Member/UserId').get().then((response) => {
+    pnp.sp.web.inBatch(batch).lists.expand("RootFolder", "RoleAssignments", "RoleAssignments/RoleDefinitionBindings", "RoleAssignments/Member", "RoleAssignments/Member/Users", "RoleAssignments/Member/Groups", "RoleAssignments/Member/UserId").get().then((response) => {
 
       securityInfo.lists = response.map(function (listObject) {
         let mylist = new SPList();

@@ -37,14 +37,17 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
                 Welcome to SharePoint!
               </span>
               <p className='ms-font-l ms-fontColor-white'>
-                asd {this.state.siteUsers.length}
+                # of users {this.state.siteUsers.length}
 
               </p>
               <p className='ms-font-l ms-fontColor-white'>
-                Customize SharePoint experiences using Web Parts.
+                # of Groups {this.state.siteGroups.length}
               </p>
               <p className='ms-font-l ms-fontColor-white'>
-                {this.props.description}
+                # of Role Definitions {this.state.roleDefinitions.length}
+              </p>
+              <p className='ms-font-l ms-fontColor-white'>
+                # of lists{this.state.roleDefinitions.length}
               </p>
               <a
                 className={css('ms-Button', styles.button) }
