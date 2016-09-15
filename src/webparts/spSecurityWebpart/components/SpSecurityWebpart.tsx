@@ -25,9 +25,19 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
     this.state = new SPSecurityInfo();
 
   }
+//  public  SPSecurityWebpartTableRow(props): JSX.Element {
+//     debugger;
+//    return (
+//      <tr>key={props.list.id}><td>{props.list.title}</td><td>{props.list.id}</td></tr>
+//    );
+//  }
+
+
 
   public render(): JSX.Element {
     debugger;
+
+    let state: any = this.state;
     return (
       <div className={styles.spSecurityWebpart}>
         <div className={styles.container}>
@@ -38,8 +48,11 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
                 Welcome to SharePoint!
               </span>
                <div className="ms-Table">
-          {this.state.lists.map(function (list) {
-           return <SPSecurityWebpartTableRow list={list}  />;
+
+          {
+
+            this.state.lists.map(function(list) {
+           return <SPSecurityWebpartTableRow list={list} users={this.states.users}  />;
           }) }
         </div>
               <p className="ms-font-l ms-fontColor-white">
