@@ -12,7 +12,7 @@ export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps 
 export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, SPSecurityInfo> {
   private svc: spSecurityService = new spSecurityService("ss");
   public componentWillMount(): void {
-    debugger;
+
     this.svc.loadData(false).then((response) => {
 
       this.setState(response as SPSecurityInfo );

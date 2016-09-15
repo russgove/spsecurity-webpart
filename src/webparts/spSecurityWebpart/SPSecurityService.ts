@@ -121,7 +121,7 @@ export default class SPSecurityService {
         roleDefinition.BasePermissions.Low = parseInt(roleDefinition.BasePermissions.Low);
         return roleDefinition;
       });
-      debugger;
+
       return securityInfo.roleDefinitions;
     });
     pnp.sp.web.inBatch(batch).lists.expand("RootFolder", "RoleAssignments", "RoleAssignments/RoleDefinitionBindings", "RoleAssignments/Member", "RoleAssignments/Member/Users", "RoleAssignments/Member/Groups", "RoleAssignments/Member/UserId").get().then((response) => {
