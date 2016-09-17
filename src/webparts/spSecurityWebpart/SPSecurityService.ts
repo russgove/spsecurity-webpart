@@ -10,62 +10,53 @@ export interface ISPSecurableObject {
 
 }
 
-export interface ISPBasePermissions {
+export class SPBasePermissions {
   low: number;
   high: number;
-}
-export interface ISPSiteUser {
-  name: string;
-  id: number;
-}
-export interface ISPRoleDefinition {
-  id: number;
-  basePermissionss: ISPBasePermissions;
-  description: string;
-  hidden: boolean;
-  name: string;
+  public constructor(high: any, low: any) {
+    this.high = parseInt(high);
+    this.low = parseInt(low);
 
-}
-export interface ISPRoleAssignment {
-  roleDefinitions: number[];
-  users: number[];
-  groups: number[];
-  userId: number;
-
+  }
 }
 export enum securableType {
   List
 }
 
-export interface IPSecurityInfo {
-  siteUsers: SPSiteUser[];
-  siteGroups: SPSiteGroup[];
-  roleDefinitions: ISPRoleDefinition[];
-}
+
 export class SPSiteGroup {
   public id: number;
   public title: string;
   public isHiddenInUI: boolean;
   public isShareByEmailGuestUse: boolean;
   public isSiteAdmin: boolean;
-  public users: number[];
+  public userIds: number[];
 }
-export class SPSiteUser implements ISPSiteUser {
+export class SPSiteUser {
   public name: string;
   public id: number;
 }
-export class SPRoleDefinition implements ISPRoleDefinition {
+
+export class SPRoleDefinition {
   public id: number;
-  public basePermissionss: ISPBasePermissions;
+  public basePermissions: SPBasePermissions;
   public description: string;
   public hidden: boolean;
   public name: string;
+  public constructor(id: number, basePermissions: SPBasePermissions, description: string, hidden: boolean, name: string) {
+    this.id = id;
+    this.basePermissions = basePermissions;
+    this.description = description;
+    this.hidden = hidden;
+    this.name = name;
+  }
+
 
 }
-export class SPSecurityInfo implements IPSecurityInfo {
+export class SPSecurityInfo {
   public siteUsers: SPSiteUser[];
   public siteGroups: SPSiteGroup[];
-  public roleDefinitions: ISPRoleDefinition[];
+  public roleDefinitions: SPRoleDefinition[];
   public lists: SPList[];
   public constructor() {
 
@@ -85,7 +76,7 @@ export class SPList {
   public serverRelativeUrl: string;
   public type: securableType;
   public itemCount: number;
-  public RoleAssignments: ISPRoleAssignment[];
+  public RoleAssignments: SPRoleAssignment[];
 }
 
 export class SPRoleAssignment {
@@ -99,96 +90,100 @@ export class SPRoleAssignment {
 export class Helpers {
   public static doesUserHavePermission(securableObject, user, requestedpermission: SPPermission, roles, siteGroups) {
 
-    var permissions = Helpers.getUserPermissions(securableObject, user, roles, siteGroups);
+    let permissions: SPBasePermissions[] = Helpers.getUserPermissionsForObject(securableObject, user, roles, siteGroups);
     for (var i = 0; i < permissions.length; i++) {
       // F'in javascript
       //(permissions[i].Low & requestedpermission.low === requestedpermission.low) returns a 1, not true!
       if (
-        ((permissions[i].Low & requestedpermission.value.Low) === (requestedpermission.value.Low))
+        ((permissions[i].low & requestedpermission.value.Low) === (requestedpermission.value.Low))
         &&
-        ((permissions[i].High & requestedpermission.value.High) === (requestedpermission.value.High))
+        ((permissions[i].high & requestedpermission.value.High) === (requestedpermission.value.High))
       ) {
-        Log.verbose("Helpers", "user does have permission")
+        Log.verbose("Helpers", "user does have permission");
         return true;
       }
     }
     Log.verbose("Helpers", "user does not  have permission")
     return false;
   };
-  public static getUserPermissions(securableObject, user, roles, siteGroups) {
-
-    var roleAssignments = Helpers.GetRoleAssignmentsForUser(securableObject, user, siteGroups);
-    var roleDefinitionIds = [];
-    for (var rax = 0; rax < roleAssignments.length; rax++) {
-      for (var rdx = 0; rdx < roleAssignments[rax].roleDefinitionIds.length; rdx++) {
-        roleDefinitionIds.push(roleAssignments[rax].roleDefinitionIds[rdx]);
-      }
-    }
 
 
-    return Helpers.getBasePermissionsForRoleDefinitiuonIds(roleDefinitionIds, roles);
-  };
-
-  public static getBasePermissionsForRoleDefinitiuonIds(roleDefinitionIds, roleDefs) {
+  public static getBasePermissionsForRoleDefinitiuonIds(selectedRoleDefinitionIds: number[], roleDefinitions: SPRoleDefinition[]) {
     var basePermissions = [];
-    for (var rdx = 0; rdx < roleDefs.length; rdx++) {
-      for (var rdi = 0; rdi < roleDefinitionIds.length; rdi++) {
-        if (roleDefs[rdx].Id === roleDefinitionIds[rdi]) {
-          basePermissions.push(roleDefs[rdx].BasePermissions);
+    for (let selectedRoleDefinitionId of selectedRoleDefinitionIds) {
+      for (let roleDefinition of roleDefinitions) {
+        if (roleDefinition.id === selectedRoleDefinitionId) {
+          basePermissions.push(roleDefinition.basePermissions);
         }
       }
     }
+    //  for (var rdx = 0; rdx < roleDefs.length; rdx++) {
+    //    for (var rdi = 0; rdi < roleDefinitionIds.length; rdi++) {basePermission
+    //      if (roleDefs[rdx].Id === roleDefinitionIds[rdi]) {
+    //        basePermissions.push(roleDefs[rdx].BasePermissions);
+    //      }
+    //    }
+    //  }
     return basePermissions;
   }
   public static getUserPermissionsForObject(securableObject, user, roles: SPRoleDefinition[], siteGroups: SPSiteGroup[]) {
 
     let roleAssignments: SPRoleAssignment[] = Helpers.GetRoleAssignmentsForUser(securableObject, user, siteGroups);
     let roleDefinitionIds: number[] = [];
-    for (var rax = 0; rax < roleAssignments.length; rax++) {
-      for (var rdx = 0; rdx < roleAssignments[rax].roleDefinitionIds.length; rdx++) {
-        roleDefinitionIds.push(roleAssignments[rax].roleDefinitionIds[rdx]);
+
+    for (let roleAssignment of roleAssignments) {
+      for (let roleDefinitionID of roleAssignment.roleDefinitionIds) {
+        roleDefinitionIds.push(roleDefinitionID);
       }
     }
+    //  for (var rax = 0; rax < roleAssignments.length; rax++) {
+    //    for (var rdx = 0; rdx < roleAssignments[rax].roleDefinitionIds.length; rdx++) {
+    //      roleDefinitionIds.push(roleAssignments[rax].roleDefinitionIds[rdx]);
+    //    }
+    //  }
 
+    var userPermissions = Helpers.getBasePermissionsForRoleDefinitiuonIds(roleDefinitionIds, roles);
 
-    return Helpers.getBasePermissionsForRoleDefinitiuonIds(roleDefinitionIds, roles);
+    return userPermissions;
   }
   public static GetRoleAssignmentsForUser(securableObject: ISPSecurableObject, user: SPSiteUser, groups: SPSiteGroup[]): SPRoleAssignment[] {
-    let component: Helpers = this;
-    let ra = securableObject.RoleAssignments as SPRoleAssignment[];
+
     let selectedRoleAssignments: SPRoleAssignment[] = [];
 
-    for (let roleAssignment of ra) {
+    for (let roleAssignment of securableObject.RoleAssignments) {
 
-      let users = roleAssignment.users as SPSiteUser[];
-      for (let assignedUserId in users) {
-        if (parseInt(assignedUserId) === user.id) {
+      for (let assignedUser of roleAssignment.users) {
+        if (assignedUser.id === user.id) {
           selectedRoleAssignments.push(roleAssignment);
         }
       }
-      let groups2 = groups as SPSiteGroup[];
-      for (let group in groups2) {
-        debugger;
+
+
+      for (let group of groups) {
+
+
         // if the user is in the group add the assignment
-     //   for (let groupUser in group.Users) {
-       //   if (groupUser.Id === user.Id) {
-         //   selectedRoleAssignments.push(roleAssignment);
-          //}
-      ///  }
+        for (let groupUserId of group.userIds) {
+          if (groupUserId === user.id) {
+            selectedRoleAssignments.push(roleAssignment);
+
+          }
+        }
+        //   if (roleAssignment.userId
+        //     && user.UserId
+        //    && roleAssignment.UserId.NameId
+        //   && roleAssignment.UserId.NameIdIssuer
+        //   && roleAssignment.UserId.NameId == user.UserId.NameId
+        // && roleAssignment.UserId.NameIdIssuer == user.UserId.NameIdIssuer) {
+        //     selectedRoleAssignments.push(roleAssignment)
+        //   }
+
+
       }
-      //     if (roleAssignment.UserId
-      //       && user.UserId
-      //       && roleAssignment.UserId.NameId
-      //       && roleAssignment.UserId.NameIdIssuer
-      //       && roleAssignment.UserId.NameId == user.UserId.NameId
-      //       && roleAssignment.UserId.NameIdIssuer == user.UserId.NameIdIssuer) {
-      //       selectedRoleAssignments.push(roleAssignment)
-      //     }
 
-
+     // Log.verbose("Helpers", "user " + user.id + " has " + selectedRoleAssignments.length + " RoleAssignments");
     }
     return selectedRoleAssignments;
-
   }
 }
 export default class SPSecurityService {
@@ -216,7 +211,7 @@ export default class SPSecurityService {
         let siteGroup: SPSiteGroup = new SPSiteGroup();
         siteGroup.id = grp.Id;
         siteGroup.title = grp.Title;
-        siteGroup.users = grp.Users.map((user) => {
+        siteGroup.userIds = grp.Users.map((user) => {
           return user.Id;
         });
 
@@ -225,9 +220,16 @@ export default class SPSecurityService {
       return securityInfo.siteGroups;
     });
     pnp.sp.web.inBatch(batch).roleDefinitions.expand("BasePermissions").get().then((response) => {
-      securityInfo.roleDefinitions = response.map(function (roleDefinition) {
-        roleDefinition.BasePermissions.High = parseInt(roleDefinition.BasePermissions.High);
-        roleDefinition.BasePermissions.Low = parseInt(roleDefinition.BasePermissions.Low);
+      securityInfo.roleDefinitions = response.map(function (response) {
+
+        let bp = new SPBasePermissions(response.BasePermissions.High, response.BasePermissions.Low);
+        let roleDefinition: SPRoleDefinition = new SPRoleDefinition(
+          parseInt(response.Id),
+           bp,
+          response.Description,
+          response.Hidden,
+          response.Name);
+
         return roleDefinition;
       });
 

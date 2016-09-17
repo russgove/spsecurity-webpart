@@ -35,7 +35,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
 
 
   public render(): JSX.Element {
-    debugger;
+
     return (
         // state object has an array of lists and an array of users
        <div className="ms-Table">
