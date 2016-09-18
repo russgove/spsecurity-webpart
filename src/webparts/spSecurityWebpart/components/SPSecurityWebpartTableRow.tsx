@@ -19,12 +19,12 @@ class SPSecurityWebpartTableCell extends React.Component<any, any> {
 
   public render(): JSX.Element {
 
-   if( Helpers.doesUserHavePermission(this.props.list as SPList, this.props.user as SPSiteUser,SPPermission.editListItems , this.props.roleDefinitions as SPRoleDefinition[], this.props.siteGroups as SPSiteGroup[])){
-return (<td>X</td>);
- }
-   else{
-     return (<td></td>);
-   }
+    if (Helpers.doesUserHavePermission(this.props.list as SPList, this.props.user as SPSiteUser, SPPermission.editListItems, this.props.roleDefinitions as SPRoleDefinition[], this.props.siteGroups as SPSiteGroup[])) {
+      return (<td>X</td>);
+    }
+    else {
+      return (<td></td>);
+    }
 
   }
 }

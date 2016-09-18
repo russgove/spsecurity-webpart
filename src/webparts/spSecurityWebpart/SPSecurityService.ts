@@ -11,8 +11,8 @@ export interface ISPSecurableObject {
 }
 
 export class SPBasePermissions {
-  low: number;
-  high: number;
+  public low: number;
+  public high: number;
   public constructor(high: any, low: any) {
     this.high = parseInt(high);
     this.low = parseInt(low);
@@ -80,8 +80,8 @@ export class SPList {
   public RoleAssignments: SPRoleAssignment[];
 }
 export class SPExternalUser {
-  nameId: string;
-  nameIdIssuer: string;
+  public nameId: string;
+  public nameIdIssuer: string;
 }
 export class SPRoleAssignment {
   public roleDefinitionIds: number[] = [];
@@ -93,7 +93,7 @@ export class SPRoleAssignment {
 }
 export class Helpers {
   public static doesUserHavePermission(securableObject, user, requestedpermission: SPPermission, roles, siteGroups) {
-debugger;
+    debugger;
     let permissions: SPBasePermissions[] = Helpers.getUserPermissionsForObject(securableObject, user, roles, siteGroups);
     for (var i = 0; i < permissions.length; i++) {
       // F'in javascript
@@ -107,7 +107,7 @@ debugger;
         return true;
       }
     }
-    Log.verbose("Helpers", "user does not  have permission")
+    Log.verbose("Helpers", "user does not  have permission");
     return false;
   };
 
@@ -179,7 +179,7 @@ debugger;
           && roleAssignment.userId.nameIdIssuer
           && roleAssignment.userId.nameId == user.userId.nameId
           && roleAssignment.userId.nameIdIssuer == user.userId.nameIdIssuer) {
-          selectedRoleAssignments.push(roleAssignment)
+          selectedRoleAssignments.push(roleAssignment);
         }
 
 
@@ -230,15 +230,15 @@ export default class SPSecurityService {
       return securityInfo.siteGroups;
     });
     pnp.sp.web.inBatch(batch).roleDefinitions.expand("BasePermissions").get().then((response) => {
-      securityInfo.roleDefinitions = response.map(function (response) {
+      securityInfo.roleDefinitions = response.map(function (rd) {
 
-        let bp = new SPBasePermissions(response.BasePermissions.High, response.BasePermissions.Low);
+        let bp = new SPBasePermissions(rd.BasePermissions.High, rd.BasePermissions.Low);
         let roleDefinition: SPRoleDefinition = new SPRoleDefinition(
-          parseInt(response.Id),
+          parseInt(rd.Id),
           bp,
-          response.Description,
-          response.Hidden,
-          response.Name);
+          rd.Description,
+          rd.Hidden,
+          rd.Name);
 
         return roleDefinition;
       });
