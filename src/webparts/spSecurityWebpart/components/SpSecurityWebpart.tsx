@@ -38,11 +38,18 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
 
     return (
         // state object has an array of lists and an array of users
-       <div className="ms-Table">
+       <table className="ms-Table">
+       <tr>
+       <td>List Title</td>
+
+ {this.state.siteUsers.map((user) => {
+           return (<td>{user.name} </td>);
+          }) }
+          </tr>
           {this.state.lists.map((list) => {
            return <SPSecurityWebpartTableRow list={list}  Users={this.state.siteUsers} roleDefinitions={this.state.roleDefinitions} siteGroups={this.state.siteGroups} />;
           }) }
-        </div>
+        </table>
     );
 
   }

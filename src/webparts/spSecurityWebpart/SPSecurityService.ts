@@ -35,6 +35,7 @@ export class SPSiteGroup {
 export class SPSiteUser {
   public name: string;
   public id: number;
+  public userId: SPExternalUser;
 }
 
 export class SPRoleDefinition {
@@ -78,18 +79,21 @@ export class SPList {
   public itemCount: number;
   public RoleAssignments: SPRoleAssignment[];
 }
-
+export class SPExternalUser {
+  nameId: string;
+  nameIdIssuer: string;
+}
 export class SPRoleAssignment {
   public roleDefinitionIds: number[] = [];
   public users: SPSiteUser[] = [];
   public groups: SPSiteGroup[] = [];
-  public userId: number = 0;
+  public userId: SPExternalUser;
 
 
 }
 export class Helpers {
   public static doesUserHavePermission(securableObject, user, requestedpermission: SPPermission, roles, siteGroups) {
-
+debugger;
     let permissions: SPBasePermissions[] = Helpers.getUserPermissionsForObject(securableObject, user, roles, siteGroups);
     for (var i = 0; i < permissions.length; i++) {
       // F'in javascript
@@ -169,19 +173,19 @@ export class Helpers {
 
           }
         }
-        //   if (roleAssignment.userId
-        //     && user.UserId
-        //    && roleAssignment.UserId.NameId
-        //   && roleAssignment.UserId.NameIdIssuer
-        //   && roleAssignment.UserId.NameId == user.UserId.NameId
-        // && roleAssignment.UserId.NameIdIssuer == user.UserId.NameIdIssuer) {
-        //     selectedRoleAssignments.push(roleAssignment)
-        //   }
+        if (roleAssignment.userId
+          && user.userId
+          && roleAssignment.userId.nameId
+          && roleAssignment.userId.nameIdIssuer
+          && roleAssignment.userId.nameId == user.userId.nameId
+          && roleAssignment.userId.nameIdIssuer == user.userId.nameIdIssuer) {
+          selectedRoleAssignments.push(roleAssignment)
+        }
 
 
       }
 
-     // Log.verbose("Helpers", "user " + user.id + " has " + selectedRoleAssignments.length + " RoleAssignments");
+      // Log.verbose("Helpers", "user " + user.id + " has " + selectedRoleAssignments.length + " RoleAssignments");
     }
     return selectedRoleAssignments;
   }
@@ -198,9 +202,15 @@ export default class SPSecurityService {
 
     pnp.sp.web.inBatch(batch).siteUsers.get().then((response) => {
       securityInfo.siteUsers = response.map((u) => {
+
         let user: SPSiteUser = new SPSiteUser();
         user.id = u.Id;
-        user.name = u.Name;
+        user.name = u.Title;
+        if (u.UserId) {
+          user.userId = new SPExternalUser();
+          user.userId.nameId = u.UserId.NameId;
+          user.userId.nameIdIssuer = u.UserId.NameIdIssuer;
+        }
         return user;
       });
       return securityInfo.siteUsers;
@@ -225,7 +235,7 @@ export default class SPSecurityService {
         let bp = new SPBasePermissions(response.BasePermissions.High, response.BasePermissions.Low);
         let roleDefinition: SPRoleDefinition = new SPRoleDefinition(
           parseInt(response.Id),
-           bp,
+          bp,
           response.Description,
           response.Hidden,
           response.Name);
@@ -249,7 +259,9 @@ export default class SPSecurityService {
         mylist.RoleAssignments = listObject.RoleAssignments.map(function (roleAssignmentObject) {
           let roleAssignment: SPRoleAssignment = new SPRoleAssignment();
           if (roleAssignmentObject.Member.UserId) {
-            roleAssignment.userId = roleAssignmentObject.Member.UserId;
+            roleAssignment.userId = new SPExternalUser();
+            roleAssignment.userId.nameId = roleAssignmentObject.Member.UserId.NameId;
+            roleAssignment.userId.nameIdIssuer = roleAssignmentObject.Member.UserId.NameIdIssuer;
           }
           if (roleAssignmentObject.Member.Users) {
             roleAssignment.users = roleAssignmentObject.Member.Users.map(function (user) {

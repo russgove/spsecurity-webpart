@@ -18,10 +18,14 @@ class SPSecurityWebpartTableCell extends React.Component<any, any> {
 
 
   public render(): JSX.Element {
-    let testuser = new SPSiteUser();
-    testuser.id = 1073741823;
-    Helpers.doesUserHavePermission(this.props.list as SPList,testuser as SPSiteUser, SPPermission.editListItems, this.props.roleDefinitions as SPRoleDefinition[], this.props.siteGroups as SPSiteGroup[]);
-    return (<td>{this.props.user.Title} {this.props.list.id}</td>);
+
+   if( Helpers.doesUserHavePermission(this.props.list as SPList, this.props.user as SPSiteUser,SPPermission.editListItems , this.props.roleDefinitions as SPRoleDefinition[], this.props.siteGroups as SPSiteGroup[])){
+return (<td>X</td>);
+ }
+   else{
+     return (<td></td>);
+   }
+
   }
 }
 export default class SPSecurityWebpartTableRow extends React.Component<any, any> {
@@ -32,7 +36,7 @@ export default class SPSecurityWebpartTableRow extends React.Component<any, any>
   public render(): JSX.Element {
 
     return (
-      <tr>key={this.props.list.id}><td>{this.props.list.title}</td><td>{this.props.list.id}</td>{this.props.Users.map((user) => {
+      <tr>key={this.props.list.id}><td>{this.props.list.title}</td>{this.props.Users.map((user) => {
         return <SPSecurityWebpartTableCell user={user}  list={this.props.list} roleDefinitions={this.props.roleDefinitions} siteGroups={this.props.siteGroups}  />;
       }) }</tr>
     );
