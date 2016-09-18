@@ -2,9 +2,15 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 import spSecurityService from "./spsecurityService";
 import {
+  SPPermission,
+  Log
+} from "@microsoft/sp-client-base";
+
+import {
   BaseClientSideWebPart,
   IPropertyPaneSettings,
   IWebPartContext,
+  PropertyPaneDropdown,
   PropertyPaneTextField
 } from "@microsoft/sp-client-preview";
 import { SPSiteUser, SPSiteGroup} from "./spsecurityservice";
@@ -48,7 +54,12 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                  PropertyPaneDropdown('permission', {
+                    options:SPPermission,
+                  label: strings.PermissionFieldLabel
                 })
+
               ]
             }
           ]
