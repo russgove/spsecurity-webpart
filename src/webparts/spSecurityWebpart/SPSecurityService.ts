@@ -93,7 +93,7 @@ export class SPRoleAssignment {
 }
 export class Helpers {
   public static doesUserHavePermission(securableObject, user, requestedpermission: SPPermission, roles, siteGroups) {
-    debugger;
+
     let permissions: SPBasePermissions[] = Helpers.getUserPermissionsForObject(securableObject, user, roles, siteGroups);
     for (var i = 0; i < permissions.length; i++) {
       // F'in javascript

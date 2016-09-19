@@ -40,7 +40,16 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
 
 
   }
-
+  public getPermissionTypes(){
+    let perms=new Array();
+    for (let perm in SPPermission){
+      perms.push({
+        key:perm,
+        value:SPPermission[perm].value
+      });
+    }
+    return perms;
+  }
   protected get propertyPaneSettings(): IPropertyPaneSettings {
     return {
       pages: [
@@ -52,13 +61,14 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
+                PropertyPaneTextField("description", {
                   label: strings.DescriptionFieldLabel
                 }),
-                  PropertyPaneDropdown('permission', {
-                    options:SPPermission,
-                  label: strings.PermissionFieldLabel
-                })
+    PropertyPaneDropdown("permission", {
+                   label: "Permission Type",
+    options:this.getPermissionTypes()
+                 })
+
 
               ]
             }
