@@ -31,22 +31,24 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
   public render(): void {
     debugger;
 
-    let props: SpSecurityWebpartWebPartProps = new SpSecurityWebpartWebPartProps();
-    props.description = this.properties.description;
-    const element: React.ReactElement<ISpSecurityWebpartProps> = React.createElement(SpSecurityWebpart, props);
+
+    const element: React.ReactElement<ISpSecurityWebpartProps> = React.createElement(SpSecurityWebpart, this.properties);
 
     ReactDom.render(element, this.domElement);
 
 
 
   }
-  public getPermissionTypes(){
-    let perms=new Array();
-    for (let perm in SPPermission){
-      perms.push({
-        key:perm,
-        value:SPPermission[perm].value
-      });
+  public getPermissionTypes() {
+    let perms = new Array();
+    for (let perm in SPPermission) {
+      Log.verbose("getPermissionTypes", "name is " + perm + " type is " + typeof (SPPermission[perm]));
+      if (typeof (SPPermission[perm]) === "object") {
+        perms.push({
+          text: perm,
+          key: perm
+        });
+      }
     }
     return perms;
   }
@@ -64,10 +66,10 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
                 PropertyPaneTextField("description", {
                   label: strings.DescriptionFieldLabel
                 }),
-    PropertyPaneDropdown("permission", {
-                   label: "Permission Type",
-    options:this.getPermissionTypes()
-                 })
+                PropertyPaneDropdown("permission", {
+                  label: "Permission Type",
+                  options: this.getPermissionTypes()
+                })
 
 
               ]
