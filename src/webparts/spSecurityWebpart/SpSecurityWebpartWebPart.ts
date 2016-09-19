@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
-import spSecurityService from "./spsecurityService";
 import {
   SPPermission,
   Log
@@ -13,8 +12,6 @@ import {
   PropertyPaneDropdown,
   PropertyPaneTextField
 } from "@microsoft/sp-client-preview";
-import { SPSiteUser, SPSiteGroup} from "./spsecurityservice";
-
 import * as strings from "mystrings";
 import SpSecurityWebpart, { ISpSecurityWebpartProps } from "./components/SpSecurityWebpart";
 import { ISpSecurityWebpartWebPartProps,
@@ -41,7 +38,7 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
   }
   public getPermissionTypes() {
     let perms = new Array();
-    for (let perm in SPPermission) {
+    for (const perm in SPPermission) {
       Log.verbose("getPermissionTypes", "name is " + perm + " type is " + typeof (SPPermission[perm]));
       if (typeof (SPPermission[perm]) === "object") {
         perms.push({

@@ -1,7 +1,7 @@
 import {SPSiteUser} from "./spsecurityservice";
 import {
   SPPermission,
-  Log
+
 } from "@microsoft/sp-client-base";
 
 export interface ISpSecurityWebpartWebPartProps {

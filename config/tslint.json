@@ -25,7 +25,7 @@
       "no-duplicate-key": false,
       "no-duplicate-variable": true,
       "no-eval": false,
-     // "no-function-expression": true,
+     "no-function-expression": true,
       "no-internal-module": true,
       "no-shadowed-variable": true,
       "no-switch-case-fall-through": true,

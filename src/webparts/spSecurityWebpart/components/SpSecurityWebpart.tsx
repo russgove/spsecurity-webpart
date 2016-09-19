@@ -34,7 +34,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
           <td>List Title</td>
 
           {this.state.siteUsers.map((user) => {
-            return (<td>{user.name} </td>);
+            return (<td className={css('ms-grid-col', styles.rotate) }> {user.name} </td>);
           }) }
         </tr>
         {this.state.lists.map((list) => {
