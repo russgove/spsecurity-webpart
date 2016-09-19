@@ -1,4 +1,4 @@
-import {SPSiteUser} from './spsecurityservice';
+import {SPSiteUser} from "./spsecurityservice";
 import {
   SPPermission,
   Log
