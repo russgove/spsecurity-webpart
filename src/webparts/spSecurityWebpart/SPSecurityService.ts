@@ -94,28 +94,26 @@ export class SPRoleAssignment {
 export class Helpers {
   public static doesUserHavePermission(securableObject, user, requestedpermission: SPPermission, roles, siteGroups) {
 
-    let permissions: SPBasePermissions[] = Helpers.getUserPermissionsForObject(securableObject, user, roles, siteGroups);
-    for (var i = 0; i < permissions.length; i++) {
-      // F'in javascript
-      //(permissions[i].Low & requestedpermission.low === requestedpermission.low) returns a 1, not true!
+    const permissions: SPBasePermissions[] = Helpers.getUserPermissionsForObject(securableObject, user, roles, siteGroups);
+
+
+    for (const permission of permissions) {
       if (
-        ((permissions[i].low & requestedpermission.value.Low) === (requestedpermission.value.Low))
+        ((permission.low & requestedpermission.value.Low) === (requestedpermission.value.Low))
         &&
-        ((permissions[i].high & requestedpermission.value.High) === (requestedpermission.value.High))
+        ((permission.high & requestedpermission.value.High) === (requestedpermission.value.High))
       ) {
-        Log.verbose("Helpers", "user does have permission");
         return true;
       }
     }
-    Log.verbose("Helpers", "user does not  have permission");
     return false;
   };
 
 
   public static getBasePermissionsForRoleDefinitiuonIds(selectedRoleDefinitionIds: number[], roleDefinitions: SPRoleDefinition[]) {
-    var basePermissions = [];
-    for (let selectedRoleDefinitionId of selectedRoleDefinitionIds) {
-      for (let roleDefinition of roleDefinitions) {
+    let basePermissions = [];
+    for (const selectedRoleDefinitionId of selectedRoleDefinitionIds) {
+      for (const roleDefinition of roleDefinitions) {
         if (roleDefinition.id === selectedRoleDefinitionId) {
           basePermissions.push(roleDefinition.basePermissions);
         }
@@ -132,11 +130,11 @@ export class Helpers {
   }
   public static getUserPermissionsForObject(securableObject, user, roles: SPRoleDefinition[], siteGroups: SPSiteGroup[]) {
 
-    let roleAssignments: SPRoleAssignment[] = Helpers.GetRoleAssignmentsForUser(securableObject, user, siteGroups);
+    const roleAssignments: SPRoleAssignment[] = Helpers.GetRoleAssignmentsForUser(securableObject, user, siteGroups);
     let roleDefinitionIds: number[] = [];
 
-    for (let roleAssignment of roleAssignments) {
-      for (let roleDefinitionID of roleAssignment.roleDefinitionIds) {
+    for (const roleAssignment of roleAssignments) {
+      for (const roleDefinitionID of roleAssignment.roleDefinitionIds) {
         roleDefinitionIds.push(roleDefinitionID);
       }
     }
@@ -154,20 +152,17 @@ export class Helpers {
 
     let selectedRoleAssignments: SPRoleAssignment[] = [];
 
-    for (let roleAssignment of securableObject.RoleAssignments) {
+    for (const roleAssignment of securableObject.RoleAssignments) {
 
-      for (let assignedUser of roleAssignment.users) {
+      for (const assignedUser of roleAssignment.users) {
         if (assignedUser.id === user.id) {
           selectedRoleAssignments.push(roleAssignment);
         }
       }
 
-
-      for (let group of groups) {
-
-
+      for (const group of groups) {
         // if the user is in the group add the assignment
-        for (let groupUserId of group.userIds) {
+        for (const groupUserId of group.userIds) {
           if (groupUserId === user.id) {
             selectedRoleAssignments.push(roleAssignment);
 
@@ -312,10 +307,10 @@ export default class SPSecurityService {
       return securityInfo.siteGroups;
     });
     pnp.sp.web.inBatch(batch).roleDefinitions.expand("BasePermissions").get().then((response) => {
-      securityInfo.roleDefinitions = response.map(function (rd) {
+      securityInfo.roleDefinitions = response.map((rd) => {
 
-        let bp = new SPBasePermissions(rd.BasePermissions.High, rd.BasePermissions.Low);
-        let roleDefinition: SPRoleDefinition = new SPRoleDefinition(
+        const bp = new SPBasePermissions(rd.BasePermissions.High, rd.BasePermissions.Low);
+        const roleDefinition: SPRoleDefinition = new SPRoleDefinition(
           parseInt(rd.Id),
           bp,
           rd.Description,
@@ -329,7 +324,7 @@ export default class SPSecurityService {
     });
     pnp.sp.web.inBatch(batch).lists.expand("RootFolder", "RoleAssignments", "RoleAssignments/RoleDefinitionBindings", "RoleAssignments/Member", "RoleAssignments/Member/Users", "RoleAssignments/Member/Groups", "RoleAssignments/Member/UserId").get().then((response) => {
 
-      securityInfo.lists = response.map(function (listObject) {
+      securityInfo.lists = response.map((listObject) => {
         let mylist = new SPList();
 
         mylist.title = listObject.Title;
@@ -338,7 +333,7 @@ export default class SPSecurityService {
         mylist.serverRelativeUrl = listObject.RootFolder.ServerRelativeUrl;
         mylist.type = securableType.List;// to differeentiate foldes from lists
         mylist.itemCount = listObject.ItemCount;
-        mylist.RoleAssignments = listObject.RoleAssignments.map(function (roleAssignmentObject) {
+        mylist.RoleAssignments = listObject.RoleAssignments.map((roleAssignmentObject) => {
           let roleAssignment: SPRoleAssignment = new SPRoleAssignment();
           if (roleAssignmentObject.Member.UserId) {
             roleAssignment.userId = new SPExternalUser();
@@ -346,16 +341,16 @@ export default class SPSecurityService {
             roleAssignment.userId.nameIdIssuer = roleAssignmentObject.Member.UserId.NameIdIssuer;
           }
           if (roleAssignmentObject.Member.Users) {
-            roleAssignment.users = roleAssignmentObject.Member.Users.map(function (user) {
+            roleAssignment.users = roleAssignmentObject.Member.Users.map((user) => {
               return user.Id;
             });
           }
           if (roleAssignmentObject.Member.Groips) {
-            roleAssignment.groups = roleAssignmentObject.Member.Groups.map(function (group) {
+            roleAssignment.groups = roleAssignmentObject.Member.Groups.map((group) => {
               return group.Id;
             });
           }
-          mylist.RoleAssignments = roleAssignmentObject.RoleDefinitionBindings.map(function (roleDefinitionBinding) {
+          mylist.RoleAssignments = roleAssignmentObject.RoleDefinitionBindings.map((roleDefinitionBinding) => {
             roleAssignment.roleDefinitionIds.push(roleDefinitionBinding.Id as number);
           });
           return roleAssignment;
@@ -364,7 +359,7 @@ export default class SPSecurityService {
       });
 
     });
-    return batch.execute().then(function (x) {
+    return batch.execute().then(() => {
       return securityInfo;
     });
   }
