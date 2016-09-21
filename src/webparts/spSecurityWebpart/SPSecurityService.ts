@@ -79,6 +79,15 @@ export class SPList {
   public itemCount: number;
   public RoleAssignments: SPRoleAssignment[];
 }
+export class SPListItem {
+  id: number;
+  listTitle: string;
+  type: string;
+  itemCount: number;
+  title: string;
+  serverRelativeUrl: string;
+  roleAssignments: SPRoleAssignment[];
+}
 export class SPExternalUser {
   public nameId: string;
   public nameIdIssuer: string;
@@ -191,7 +200,7 @@ export default class SPSecurityService {
   public constructor(siteUrl: string) {
     this.siteUrl = siteUrl;
   }
-  public loadFolderRoleAssigmentsDefinitionsMembers(listTitle, folderServerRelativeUrl, forceReload) {
+  public loadFolderRoleAssigmentsDefinitionsMembers(listTitle, folderServerRelativeUrl, forceReload):Promise<SPListItem[]> {
 
     // pnp.sp.web.lists.getByTitle("Config3").getItemsByCAMLQuery(caml, "RoleAssignments").then(show);
     let caml = {
@@ -219,17 +228,16 @@ export default class SPSecurityService {
       .then((response) => {
 
 
-        var itemsToAdd = [];
+        let itemsToAdd: SPListItem[] = [];
         for (let listItem of response) {
-          let itemToAdd = {
-            Id: listItem.Id,
-            listTitle: listTitle,
-            type: listItem.ContentType.Name,
-            itemCount: listItem.Folder.ItemCount,
-            title: "",
-            serverRelativeUrl: "",
-            RoleAssignments: []
-          };
+          let itemToAdd = new SPListItem();
+          itemToAdd.id = listItem.Id;
+          itemToAdd.listTitle = listTitle;
+          itemToAdd.type = listItem.ContentType.Name;
+          itemToAdd.itemCount = listItem.Folder.ItemCount;
+
+          itemToAdd.roleAssignments = []
+
           if (listItem.ContentType.Name == "Folder") {
             itemToAdd.title = listItem.Folder.Name;
             itemToAdd.serverRelativeUrl = listItem.Folder.ServerRelativeUrl;
@@ -266,13 +274,14 @@ export default class SPSecurityService {
               };
               roleAssignment.RoleDefinitions.push(roleDefinition);
             };
-            itemToAdd.RoleAssignments.push(roleAssignment);
+            itemToAdd.roleAssignments.push(roleAssignment);
           };
           itemsToAdd.push(itemToAdd);
         };
         return itemsToAdd;
       })
   };
+  /// Loads data for intial display
   public loadData(forceReload: boolean): Promise<SPSecurityInfo> {
     let securityInfo: SPSecurityInfo = new SPSecurityInfo();
     let batch: any = pnp.sp.createBatch();
