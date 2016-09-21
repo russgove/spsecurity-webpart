@@ -196,6 +196,88 @@ export default class SPSecurityService {
   public constructor(siteUrl: string) {
     this.siteUrl = siteUrl;
   }
+  public loadFolderRoleAssigmentsDefinitionsMembers(listTitle, folderServerRelativeUrl, forceReload) {
+
+    // pnp.sp.web.lists.getByTitle("Config3").getItemsByCAMLQuery(caml, "RoleAssignments").then(show);
+    let caml = {
+      ViewXml: "<View Scope='RecursiveAll'>" +
+      " <Query>" +
+      "<Where>" +
+      "   <Eq>" +
+      "      <FieldRef Name='FileDirRef'/>" +
+      "     <Value Type='Lookup'>" +
+      folderServerRelativeUrl +
+      "    </Value>" +
+      " </Eq>" +
+      " </Where>" +
+      "  </Query>" +
+      //               "     <QueryOptions>"+
+      //    "<ViewAttributes Scope='RecursiveAll' />" +
+      //    "<OptimizeFor>FolderUrls</OptimizeFor>"+
+
+      //"</QueryOptions>"+
+      " </View>"
+    };
+    let camlss = { ViewXml: "<View><ViewFields><FieldRef Name='Title' /><FieldRef Name='RoleAssignments' /></ViewFields><RowLimit>10</RowLimit></View>" };
+
+    return pnp.sp.web.lists.getByTitle(listTitle).getItemsByCAMLQuery(caml, "ContentType", "Folder", "Folder/ParentFolder", "File", "File/ParentFolder", "RoleAssignments", "RoleAssignments/RoleDefinitionBindings", "RoleAssignments/Member", "RoleAssignments/Member/Users", "RoleAssignments/Member/Groups")
+      .then((response) => {
+
+
+        var itemsToAdd = [];
+        for (let listItem of response) {
+          let itemToAdd = {
+            Id: listItem.Id,
+            listTitle: listTitle,
+            type: listItem.ContentType.Name,
+            itemCount: listItem.Folder.ItemCount,
+            title: "",
+            serverRelativeUrl: "",
+            RoleAssignments: []
+          };
+          if (listItem.ContentType.Name == "Folder") {
+            itemToAdd.title = listItem.Folder.Name;
+            itemToAdd.serverRelativeUrl = listItem.Folder.ServerRelativeUrl;
+          }
+          else {
+            itemToAdd.title = listItem.File.Name;
+            itemToAdd.serverRelativeUrl = listItem.File.ServerRelativeUrl;
+          }
+          for (let roleAssignmentObject of listItem.RoleAssignments.results) {
+            var roleAssignment;
+            roleAssignment = {
+              RoleDefinitions: [],
+              Users: [],
+              Groups: [],
+              UserId: {} // external user
+            };
+            if (roleAssignmentObject.Member.UserId) {
+              roleAssignment.UserId = roleAssignmentObject.Member.UserId;
+            }
+            if (roleAssignmentObject.Member.Users) {
+              for (let roleAssignmentMemberUser of roleAssignmentObject.Member.Users.results) {
+                roleAssignment.Users.push(roleAssignmentMemberUser.Id);
+              };
+            }
+            if (roleAssignmentObject.Member.Groups) {
+              for (let roleAssignmentMemberGroup of roleAssignmentObject.Member.Groups.results) {
+                roleAssignment.Groups.push(roleAssignmentMemberGroup.Id);
+              };
+            }
+            for (let roleDefinitionBinding of roleAssignmentObject.RoleDefinitionBindings.results) {
+              var roleDefinition;
+              roleDefinition = {
+                Id: roleDefinitionBinding.Id
+              };
+              roleAssignment.RoleDefinitions.push(roleDefinition);
+            };
+            itemToAdd.RoleAssignments.push(roleAssignment);
+          };
+          itemsToAdd.push(itemToAdd);
+        };
+        return itemsToAdd;
+      })
+  };
   public loadData(forceReload: boolean): Promise<SPSecurityInfo> {
     let securityInfo: SPSecurityInfo = new SPSecurityInfo();
     let batch: any = pnp.sp.createBatch();
