@@ -10,13 +10,18 @@
     "@microsoft/sp-client-preview": "~0.2.0",
     "office-ui-fabric-react": "0.36.0",
     "react": "0.14.8",
-    "react-dom": "0.14.8"
+    "react-dom": "0.14.8",
+    "react-redux": "^4.4.5",
+    "redux": "^3.6.0"
   },
   "devDependencies": {
     "@microsoft/sp-build-web": "~0.5.0",
     "@microsoft/sp-module-interfaces": "~0.2.0",
     "@microsoft/sp-webpart-workbench": "~0.2.0",
+    "@types/react": "^0.14.36",
+    "@types/react-redux": "^4.4.32",
     "gulp": "~3.9.1",
+    "redux-devtools": "^3.3.1",
     "sp-pnp-js": "^1.0.3"
   },
   "scripts": {
