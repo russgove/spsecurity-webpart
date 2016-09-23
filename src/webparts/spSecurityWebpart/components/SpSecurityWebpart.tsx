@@ -11,19 +11,20 @@ import {ActionCreators } from "../redux/actions";
 export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps {
 }
 
-export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, SPSecurityInfo> {
+export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, any> {
   private svc: spSecurityService = new spSecurityService("ss");
   private reduxUnsibsribeFunction;
+  private store;
   public componentWillMount(): void {
+    debugger;
 
-    const store = configureStore({});
-    this.setState(store.getState);
-    this.reduxUnsibsribeFunction = store.subscribe(() => {
-      this.setState(store.getState());
+
+    this.reduxUnsibsribeFunction = this.store.subscribe(() => {
+      this.setState(this.store.getState());
     });
-    store.dispatch(ActionCreators.setSttatus("Initializing"));
+    this.store.dispatch(ActionCreators.setSttatus("Initializing"));
     this.svc.loadData(false).then((response) => {
-      store.dispatch(ActionCreators.init(response as SPSecurityInfo));
+      this.store.dispatch(ActionCreators.init(response as SPSecurityInfo));
     });
   }
   public componentWillUnMount(): void {
@@ -31,24 +32,29 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
   }
   public constructor(props) {
     super(props);
+    debugger;
+    this.store = configureStore({});
 
-    this.state = new SPSecurityInfo();
+  }
+  public getInitialState() {
+    debugger;
 
+    return this.store.getState();
   }
 
   public render(): JSX.Element {
-
+    debugger;
     return (
       <table className="ms-Table">
         <tr>
           <td>List Title</td>
 
-          {this.state.siteUsers.map((user) => {
+          {this.state.securityInfo.siteUsers.map((user) => {
             return (<td className={css('ms-grid-col', styles.rotate) }> {user.name} </td>);
           }) }
         </tr>
-        {this.state.lists.map((list) => {
-          return <SPSecurityWebpartTableRow list={list}  Users={this.state.siteUsers} roleDefinitions={this.state.roleDefinitions} siteGroups={this.state.siteGroups} permission={this.props.permission}/>;
+        {this.state.securityInfo.lists.map((list) => {
+          return <SPSecurityWebpartTableRow list={list}  Users={this.state.securityInfo.siteUsers} roleDefinitions={this.state.securityInfo.roleDefinitions} siteGroups={this.state.securityInfo.siteGroups} permission={this.props.permission}/>;
         }) }
       </table>
     );
