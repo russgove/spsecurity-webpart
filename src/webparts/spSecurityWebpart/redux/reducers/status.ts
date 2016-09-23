@@ -1,14 +1,17 @@
 import {
   SELECTPERMISSION
 } from "../constants";
-import { fromJS } from "immutable";
+
+
 const INITIAL_STATE = {
-  selectedPermission: "read"
+ status: "UNINITIALIZED"
 };
-export default class FilterReducer {
-  public static filterReducer(state = INITIAL_STATE, action = { type: "" }) {
+export default class StatusReducer {
+  public static statusReducer(state = INITIAL_STATE, action = { type: "" }) {
     switch (action.type) {
+
       //  case SELECTPERMISSION:
+
       default:
         return state;
     }

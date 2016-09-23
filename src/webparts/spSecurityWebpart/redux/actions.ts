@@ -1,27 +1,49 @@
 import {Action} from "redux";
+import {SPSecurityInfo } from "../SPSecurityService";
 export class ActionTypes {
   public static INIT = "INIT";
   public static SELECTPERMISSION = "SELECTPERMISSION";
+  public static SETSTATUS = "SETSTATUS";
 }
-
 export class InitAction implements Action {
-  type = ActionTypes.INIT;
+  public type = ActionTypes.INIT;
+  public spSecurityInfo: SPSecurityInfo;
 
 }
 
 export class SelectPermissionAction implements Action {
-  type = ActionTypes.SELECTPERMISSION;
-  permission: string;
+  public type = ActionTypes.SELECTPERMISSION;
+  public permission: string;
 }
 
+export class SetStatusAction implements Action {
+  public type = ActionTypes.SETSTATUS;
+  public status: string;
+}
+
+
+
 export class ActionCreators {
-  selectPermission(permission): Action {
-    let action: Action = new SelectPermissionAction().permission = permission;
+  public static selectPermission(permission): Action {
+    let action = {
+      type: ActionTypes.SELECTPERMISSION,
+      permission: permission
+    };
     return action;
   }
-  init(permission): Action {
-    let action: Action = new InitAction();
+  public static init(spSecurityInfo: SPSecurityInfo): Action {
+    let action = {
+      type: ActionTypes.INIT,
+      spSecurityInfo: spSecurityInfo
+    };
     return action;
+  }
+  public static setSttatus(status: string): Action {// Actions must be plain objects. NOT CLASSES
+    let action = {
+      type: ActionTypes.SETSTATUS,
+      status: status
+    };
+    return action;;
   }
 
 

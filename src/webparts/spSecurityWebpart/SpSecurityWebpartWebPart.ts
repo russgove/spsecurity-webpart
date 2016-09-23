@@ -21,7 +21,7 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
 
   public constructor(context: IWebPartContext) {
     super(context);
-
+debugger;
   }
 
 

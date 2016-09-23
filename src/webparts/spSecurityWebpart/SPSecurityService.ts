@@ -80,13 +80,13 @@ export class SPList {
   public RoleAssignments: SPRoleAssignment[];
 }
 export class SPListItem {
-  id: number;
-  listTitle: string;
-  type: string;
-  itemCount: number;
-  title: string;
-  serverRelativeUrl: string;
-  roleAssignments: SPRoleAssignment[];
+  public id: number;
+  public listTitle: string;
+  public type: string;
+  public itemCount: number;
+  public title: string;
+  public serverRelativeUrl: string;
+  public roleAssignments: SPRoleAssignment[];
 }
 export class SPExternalUser {
   public nameId: string;
@@ -194,13 +194,13 @@ export class Helpers {
     return selectedRoleAssignments;
   }
 }
-export default class SPSecurityService {
+export default class spSecurityService {
   public siteUrl: string;
 
   public constructor(siteUrl: string) {
     this.siteUrl = siteUrl;
   }
-  public loadFolderRoleAssigmentsDefinitionsMembers(listTitle, folderServerRelativeUrl, forceReload):Promise<SPListItem[]> {
+  public loadFolderRoleAssigmentsDefinitionsMembers(listTitle, folderServerRelativeUrl, forceReload): Promise<SPListItem[]> {
 
     // pnp.sp.web.lists.getByTitle("Config3").getItemsByCAMLQuery(caml, "RoleAssignments").then(show);
     let caml = {
@@ -236,7 +236,7 @@ export default class SPSecurityService {
           itemToAdd.type = listItem.ContentType.Name;
           itemToAdd.itemCount = listItem.Folder.ItemCount;
 
-          itemToAdd.roleAssignments = []
+          itemToAdd.roleAssignments = [];
 
           if (listItem.ContentType.Name == "Folder") {
             itemToAdd.title = listItem.Folder.Name;
@@ -247,7 +247,7 @@ export default class SPSecurityService {
             itemToAdd.serverRelativeUrl = listItem.File.ServerRelativeUrl;
           }
           for (let roleAssignmentObject of listItem.RoleAssignments.results) {
-            var roleAssignment;
+            let roleAssignment;
             roleAssignment = {
               RoleDefinitions: [],
               Users: [],
@@ -260,26 +260,26 @@ export default class SPSecurityService {
             if (roleAssignmentObject.Member.Users) {
               for (let roleAssignmentMemberUser of roleAssignmentObject.Member.Users.results) {
                 roleAssignment.Users.push(roleAssignmentMemberUser.Id);
-              };
+              }
             }
             if (roleAssignmentObject.Member.Groups) {
               for (let roleAssignmentMemberGroup of roleAssignmentObject.Member.Groups.results) {
                 roleAssignment.Groups.push(roleAssignmentMemberGroup.Id);
-              };
+              }
             }
             for (let roleDefinitionBinding of roleAssignmentObject.RoleDefinitionBindings.results) {
-              var roleDefinition;
+              let roleDefinition;
               roleDefinition = {
                 Id: roleDefinitionBinding.Id
               };
               roleAssignment.RoleDefinitions.push(roleDefinition);
-            };
+            }
             itemToAdd.roleAssignments.push(roleAssignment);
-          };
+          }
           itemsToAdd.push(itemToAdd);
-        };
+        }
         return itemsToAdd;
-      })
+      });
   };
   /// Loads data for intial display
   public loadData(forceReload: boolean): Promise<SPSecurityInfo> {

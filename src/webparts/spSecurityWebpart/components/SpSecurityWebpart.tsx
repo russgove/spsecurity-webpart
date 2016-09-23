@@ -6,20 +6,28 @@ import SPSecurityWebpartTableRow from "./SPSecurityWebpartTableRow";
 import styles from "../SpSecurityWebpart.module.scss";
 import { ISpSecurityWebpartWebPartProps } from "../ISpSecurityWebpartWebPartProps";
 import configureStore from "../redux/store";
-const store = configureStore({});
+import {ActionCreators } from "../redux/actions";
+
 export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps {
 }
 
 export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, SPSecurityInfo> {
   private svc: spSecurityService = new spSecurityService("ss");
+  private reduxUnsibsribeFunction;
   public componentWillMount(): void {
 
-
-    this.svc.loadData(false).then((response) => {
-
-      this.setState(response as SPSecurityInfo);
+    const store = configureStore({});
+    this.setState(store.getState);
+    this.reduxUnsibsribeFunction = store.subscribe(() => {
+      this.setState(store.getState());
     });
-
+    store.dispatch(ActionCreators.setSttatus("Initializing"));
+    this.svc.loadData(false).then((response) => {
+      store.dispatch(ActionCreators.init(response as SPSecurityInfo));
+    });
+  }
+  public componentWillUnMount(): void {
+    this.reduxUnsibsribeFunction();
   }
   public constructor(props) {
     super(props);

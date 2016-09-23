@@ -1,12 +1,12 @@
-import { createStore,Store } from "redux";
-import Reducer from "./Reducers";
+import { createStore, Store } from "redux";
+import RootReducer from "./Reducers";
 import State from "./state";
 
 function configureStore(initialState) {
   const store = createStore(
-    Reducer,
-    State
-  )
+    RootReducer,
+    initialState
+  );
   return store;
 }
 export default configureStore;
