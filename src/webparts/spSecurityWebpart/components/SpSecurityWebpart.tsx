@@ -5,13 +5,15 @@ import {SPSecurityInfo}from "../spsecurityService";
 import SPSecurityWebpartTableRow from "./SPSecurityWebpartTableRow";
 import styles from "../SpSecurityWebpart.module.scss";
 import { ISpSecurityWebpartWebPartProps } from "../ISpSecurityWebpartWebPartProps";
-
+import configureStore from "../redux/store";
+const store = configureStore({});
 export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps {
 }
 
 export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, SPSecurityInfo> {
   private svc: spSecurityService = new spSecurityService("ss");
   public componentWillMount(): void {
+
 
     this.svc.loadData(false).then((response) => {
 
