@@ -78,6 +78,8 @@ export class SPList {
   public type: securableType;
   public itemCount: number;
   public RoleAssignments: SPRoleAssignment[];
+  public isExpanded: boolean;
+  public hasBeenRetrieved: boolean;
 
 }
 export class SPListItem {
@@ -88,6 +90,8 @@ export class SPListItem {
   public title: string;
   public serverRelativeUrl: string;
   public roleAssignments: SPRoleAssignment[];
+  public isExpanded: boolean;
+  public hasBeenRetrieved: boolean;
 }
 export class SPExternalUser {
   public nameId: string;
@@ -236,9 +240,9 @@ export default class spSecurityService {
           itemToAdd.listTitle = listTitle;
           itemToAdd.type = listItem.ContentType.Name;
           itemToAdd.itemCount = listItem.Folder.ItemCount;
-
+          itemToAdd.isExpanded = false
+          itemToAdd.hasBeenRetrieved = false;
           itemToAdd.roleAssignments = [];
-
           if (listItem.ContentType.Name == "Folder") {
             itemToAdd.title = listItem.Folder.Name;
             itemToAdd.serverRelativeUrl = listItem.Folder.ServerRelativeUrl;
@@ -343,6 +347,8 @@ export default class spSecurityService {
         mylist.serverRelativeUrl = listObject.RootFolder.ServerRelativeUrl;
         mylist.type = securableType.List;// to differeentiate foldes from lists
         mylist.itemCount = listObject.ItemCount;
+        mylist.isExpanded = false
+        mylist.hasBeenRetrieved = false;
         mylist.RoleAssignments = listObject.RoleAssignments.map((roleAssignmentObject) => {
           let roleAssignment: SPRoleAssignment = new SPRoleAssignment();
           if (roleAssignmentObject.Member.UserId) {
