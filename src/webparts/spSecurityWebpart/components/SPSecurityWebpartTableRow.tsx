@@ -26,11 +26,11 @@ class ListIcon extends React.Component<any, any> {
   }
  public  handleClick() {
     debugger;
-    this.props.expandFolder();
+    this.props.expandFolder(this.props.list);
   }
   public render(): JSX.Element {
     if (this.props.list.itemCount >0){
-      return (<td onClick={this.handleClick}><i className="ms-Icon ms-Icon--Mail" aria-hidden="true"></i></td>);
+      return (<td onClick={this.handleClick.bind(this)}><i className="ms-Icon ms-Icon--Mail" aria-hidden="true"></i></td>);
     }
     else {
       return (<td></td>);
@@ -42,9 +42,10 @@ export default class SPSecurityWebpartTableRow extends React.Component<any, any>
     super(props);
   }
   public render(): JSX.Element {
+
     return (
       <tr>key={this.props.list.id}>
-        <ListIcon list={this.props.list}></ListIcon>
+        <ListIcon list={this.props.list} expandFolder={this.props.expandFolder}></ListIcon>
         <td>{this.props.list.title}</td>
 
         {this.props.Users.map((user) => {

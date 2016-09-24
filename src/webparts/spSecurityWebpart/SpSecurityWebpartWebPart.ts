@@ -21,10 +21,10 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
   private webPartComponent: any;
   public constructor(context: IWebPartContext) {
     super(context);
-    debugger;
+
   }
   public onPropertyChange(propertyPath: string, newValue: any) {
-    debugger;
+
     super.onPropertyChange(propertyPath, newValue);
     switch (propertyPath) {
       case "permission":
@@ -37,7 +37,7 @@ export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpS
 
   }
   public render(): void {
-    debugger;
+
     const element: React.ReactElement<ISpSecurityWebpartProps> = React.createElement(SpSecurityWebpart, this.properties);
     this.webPartComponent = ReactDom.render(element, this.domElement);
 
