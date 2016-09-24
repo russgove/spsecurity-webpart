@@ -32,21 +32,23 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
   }
   public constructor(props) {
     super(props);
-    debugger;
+
     this.store = configureStore({});
 
   }
   public getInitialState() {
-    debugger;
+debugger;
 
     return this.store.getState();
   }
-
+ public expandFolder(s) {
+ }
   public render(): JSX.Element {
-    debugger;
+debugger;
     return (
       <table className="ms-Table">
         <tr>
+        <td>+</td>
           <td>List Title</td>
 
           {this.state.securityInfo.siteUsers.map((user) => {
@@ -54,7 +56,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
           }) }
         </tr>
         {this.state.securityInfo.lists.map((list) => {
-          return <SPSecurityWebpartTableRow list={list}  Users={this.state.securityInfo.siteUsers} roleDefinitions={this.state.securityInfo.roleDefinitions} siteGroups={this.state.securityInfo.siteGroups} permission={this.props.permission}/>;
+          return <SPSecurityWebpartTableRow expandFolder={this.expandFolder} list={list}  Users={this.state.securityInfo.siteUsers} roleDefinitions={this.state.securityInfo.roleDefinitions} siteGroups={this.state.securityInfo.siteGroups} permission={this.props.permission}/>;
         }) }
       </table>
     );

@@ -4,7 +4,7 @@ import {
   SPPermission,
   Log
 } from "@microsoft/sp-client-base";
-
+import {ActionCreators } from "./redux/actions";
 import {
   BaseClientSideWebPart,
   IPropertyPaneSettings,
@@ -16,24 +16,30 @@ import * as strings from "mystrings";
 import SpSecurityWebpart, { ISpSecurityWebpartProps } from "./components/SpSecurityWebpart";
 import { ISpSecurityWebpartWebPartProps,
   SpSecurityWebpartWebPartProps } from "./ISpSecurityWebpartWebPartProps";
-
 export default class SpSecurityWebpartWebPart extends BaseClientSideWebPart<ISpSecurityWebpartWebPartProps> {
 
+  private webPartComponent: any;
   public constructor(context: IWebPartContext) {
     super(context);
-debugger;
+    debugger;
   }
+  public onPropertyChange(propertyPath: string, newValue: any) {
+    debugger;
+    super.onPropertyChange(propertyPath, newValue);
+    switch (propertyPath) {
+      case "permission":
+        let act = ActionCreators.selectPermission(newValue);
+        this.webPartComponent.store.dispatch(act);
+        break;
+      default:
+        break;
+    }
 
-
+  }
   public render(): void {
     debugger;
-
-
     const element: React.ReactElement<ISpSecurityWebpartProps> = React.createElement(SpSecurityWebpart, this.properties);
-
-    ReactDom.render(element, this.domElement);
-
-
+    this.webPartComponent = ReactDom.render(element, this.domElement);
 
   }
   public getPermissionTypes() {
@@ -67,8 +73,6 @@ debugger;
                   label: "Permission Type",
                   options: this.getPermissionTypes()
                 })
-
-
               ]
             }
           ]

@@ -78,6 +78,7 @@ export class SPList {
   public type: securableType;
   public itemCount: number;
   public RoleAssignments: SPRoleAssignment[];
+
 }
 export class SPListItem {
   public id: number;
