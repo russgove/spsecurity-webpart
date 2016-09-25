@@ -4,6 +4,9 @@ export class ActionTypes {
   public static INIT = "INIT";
   public static SELECTPERMISSION = "SELECTPERMISSION";
   public static SETSTATUS = "SETSTATUS";
+  public static EXPANDFOLDER = "EXPANDFOLDER";
+  public static COLLAPSEFOLDER = "COLLAPSEFOLDER";
+  public static GETFOLDER = "SETSTATUS";
 }
 export class InitAction implements Action {
   public type = ActionTypes.INIT;
@@ -43,8 +46,28 @@ export class ActionCreators {
       type: ActionTypes.SETSTATUS,
       status: status
     };
-    return action;;
+    return action;
   }
-
+  public static expandFolder(folderId: string): Action {// Actions must be plain objects. NOT CLASSES
+    let action = {
+      type: ActionTypes.EXPANDFOLDER,
+      folderId: folderId
+    };
+    return action;
+  }
+  public static collapseFolder(folderId: string): Action {// Actions must be plain objects. NOT CLASSES
+    let action = {
+      type: ActionTypes.COLLAPSEFOLDER,
+      folderId: folderId
+    };
+    return action;
+  }
+   public static getFolder(folderId: string): Action {// Actions must be plain objects. NOT CLASSES
+    let action = {
+      type: ActionTypes.GETFOLDER,
+      folderId: folderId
+    };
+    return action;
+  }
 
 }
