@@ -7,6 +7,7 @@ import styles from "../SpSecurityWebpart.module.scss";
 import { ISpSecurityWebpartWebPartProps } from "../ISpSecurityWebpartWebPartProps";
 import configureStore from "../redux/store";
 import {ActionCreators } from "../redux/actions";
+import thunkMiddleware from 'redux-thunk'
 
 export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps {
 }
