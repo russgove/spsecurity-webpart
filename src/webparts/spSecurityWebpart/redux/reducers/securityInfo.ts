@@ -8,7 +8,6 @@ export default class SecurityInfoReducer {
     let newstate: SPSecurityInfo = oldState; // need to cerate new copy here
     switch (action.type) {
       case ActionTypes.INIT:
-        let newstate: SPSecurityInfo = oldState; // need to cerate new copy here
         newstate.lists = action.spSecurityInfo.lists;
         newstate.roleDefinitions = action.spSecurityInfo.roleDefinitions;
         newstate.siteGroups = action.spSecurityInfo.siteGroups;

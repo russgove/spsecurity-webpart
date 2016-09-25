@@ -240,7 +240,7 @@ export default class spSecurityService {
           itemToAdd.listTitle = listTitle;
           itemToAdd.type = listItem.ContentType.Name;
           itemToAdd.itemCount = listItem.Folder.ItemCount;
-          itemToAdd.isExpanded = false
+          itemToAdd.isExpanded = false;
           itemToAdd.hasBeenRetrieved = false;
           itemToAdd.roleAssignments = [];
           if (listItem.ContentType.Name == "Folder") {
@@ -347,7 +347,7 @@ export default class spSecurityService {
         mylist.serverRelativeUrl = listObject.RootFolder.ServerRelativeUrl;
         mylist.type = securableType.List;// to differeentiate foldes from lists
         mylist.itemCount = listObject.ItemCount;
-        mylist.isExpanded = false
+        mylist.isExpanded = false;
         mylist.hasBeenRetrieved = false;
         mylist.RoleAssignments = listObject.RoleAssignments.map((roleAssignmentObject) => {
           let roleAssignment: SPRoleAssignment = new SPRoleAssignment();

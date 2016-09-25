@@ -1,7 +1,7 @@
 import * as React from "react";
 import { css } from "office-ui-fabric-react";
 import spSecurityService from "../spsecurityService";
-import {SPSecurityInfo,SPList}from "../spsecurityService";
+import {SPSecurityInfo, SPList}from "../spsecurityService";
 import SPSecurityWebpartTableRow from "./SPSecurityWebpartTableRow";
 import styles from "../SpSecurityWebpart.module.scss";
 import { ISpSecurityWebpartWebPartProps } from "../ISpSecurityWebpartWebPartProps";
@@ -38,7 +38,19 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
     debugger;
     return this.store.getState();
   }
-  public expandFolder(list:SPList) {
+  public expandFolder(list: SPList) {
+    if (list.isExpanded) {
+      this.store.dispatch(ActionCreators.collapseFolder);// alreade expanded , sol collapse it
+    }
+    else {
+      if (list.hasBeenRetrieved) {
+        this.store.dispatch(ActionCreators.expandFolder);// we alreayd have the data so just expand it
+      }
+      else {
+        this.store.dispatch(ActionCreators.getFolder);// get the data, them expand it
+      }
+    }
+
   }
   public render(): JSX.Element {
     debugger;
