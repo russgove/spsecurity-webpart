@@ -42,7 +42,7 @@ export default class SPSecurityWebpartTableRow extends React.Component<any, any>
     super(props);
   }
   public render(): JSX.Element {
-
+// need to return multple <tr> npm install --save react-addons-create-fragment
     return (
       <tr>key={this.props.list.id}>
         <ListIcon list={this.props.list} expandFolder={this.props.expandFolder}></ListIcon>
@@ -51,6 +51,7 @@ export default class SPSecurityWebpartTableRow extends React.Component<any, any>
         {this.props.Users.map((user) => {
           return <SPSecurityWebpartTableCell user={user}  list={this.props.list} roleDefinitions={this.props.roleDefinitions} siteGroups={this.props.siteGroups} permission={this.props.permission}  />;
         }) }</tr>
+
     );
   }
 }

@@ -7,15 +7,17 @@ import styles from "../SpSecurityWebpart.module.scss";
 import { ISpSecurityWebpartWebPartProps } from "../ISpSecurityWebpartWebPartProps";
 import configureStore from "../redux/store";
 import {ActionCreators } from "../redux/actions";
-import thunkMiddleware from 'redux-thunk'
+//import thunkMiddleware from "redux-thunk";
 
 export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps {
 }
 
 export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, any> {
+
   private svc: spSecurityService = new spSecurityService("ss");
   private reduxUnsibsribeFunction;
   private store;
+  private self;
   public componentWillMount(): void {
 
 
@@ -34,12 +36,15 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
   public constructor(props) {
     super(props);
     this.store = configureStore({});
+    this.self=this;
   }
   public getInitialState() {
     debugger;
     return this.store.getState();
   }
-  public expandFolder(list: SPList) {
+  public expandFolder(list: SPList) { // i lost 'this' beacuase i am being called from child
+    debugger;
+
     if (list.isExpanded) {
       this.store.dispatch(ActionCreators.collapseFolder);// alreade expanded , sol collapse it
     }
@@ -48,13 +53,18 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
         this.store.dispatch(ActionCreators.expandFolder);// we alreayd have the data so just expand it
       }
       else {
-        this.store.dispatch(ActionCreators.getFolder);// get the data, them expand it
+         let svc2: spSecurityService = new spSecurityService("ss");
+         this.svc.loadFolderRoleAssigmentsDefinitionsMembers(list.title,list.serverRelativeUrl,true).then((response) => {
+           this.store.dispatch(ActionCreators.getFolder(list.id, response));
+              this.store.dispatch(ActionCreators.expandFolder);// we alreayd have the data so just expand it
+    });
       }
     }
 
   }
-  public render(): JSX.Element {
+  public render():.Element {
     debugger;
+    let folderExpander=this.expandFolder.bind(this);
     return (
       <table className="ms-Table">
         <tr>
@@ -67,7 +77,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
         </tr>
         {this.state.securityInfo.lists.map((list) => {
 
-          return <SPSecurityWebpartTableRow expandFolder={this.expandFolder} list={list}  Users={this.state.securityInfo.siteUsers} roleDefinitions={this.state.securityInfo.roleDefinitions} siteGroups={this.state.securityInfo.siteGroups} permission={this.props.permission}/>;
+          return <SPSecurityWebpartTableRow expandFolder={folderExpander} list={list}  Users={this.state.securityInfo.siteUsers} roleDefinitions={this.state.securityInfo.roleDefinitions} siteGroups={this.state.securityInfo.siteGroups} permission={this.props.permission}/>;
         }) }
       </table>
     );

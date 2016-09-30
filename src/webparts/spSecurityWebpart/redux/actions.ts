@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {SPSecurityInfo } from "../SPSecurityService";
+import {SPSecurityInfo,SPListItem } from "../SPSecurityService";
 export class ActionTypes {
   public static INIT = "INIT";
   public static SELECTPERMISSION = "SELECTPERMISSION";
@@ -62,10 +62,10 @@ export class ActionCreators {
     };
     return action;
   }
-   public static getFolder(folderId: string): Action {// Actions must be plain objects. NOT CLASSES
+   public static getFolder(folderId: string, contents): Action {// Actions must be plain objects. NOT CLASSES
     let action = {
       type: ActionTypes.GETFOLDER,
-      folderId: folderId
+      contents: contents
     };
     return action;
   }

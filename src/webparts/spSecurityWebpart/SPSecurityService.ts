@@ -73,7 +73,7 @@ export class SPSecurityInfo {
 
 export class SPList {
   public title: string;
-  public id: number;
+  public id: string;
   public hidden: boolean;
   public serverRelativeUrl: string;
   public type: securableType;
@@ -240,7 +240,7 @@ export default class spSecurityService {
           itemToAdd.id = listItem.Id;
           itemToAdd.listTitle = listTitle;
           itemToAdd.type = listItem.ContentType.Name;
-          itemToAdd.itemCount = listItem.Folder.ItemCount;
+        //  itemToAdd.itemCount = listItem.Folder.ItemCount;
           itemToAdd.isExpanded = false;
           itemToAdd.hasBeenRetrieved = false;
           itemToAdd.roleAssignments = [];
@@ -252,7 +252,7 @@ export default class spSecurityService {
             itemToAdd.title = listItem.File.Name;
             itemToAdd.serverRelativeUrl = listItem.File.ServerRelativeUrl;
           }
-          for (let roleAssignmentObject of listItem.RoleAssignments.results) {
+          for (let roleAssignmentObject of listItem.RoleAssignments) {
             let roleAssignment;
             roleAssignment = {
               RoleDefinitions: [],
@@ -264,16 +264,16 @@ export default class spSecurityService {
               roleAssignment.UserId = roleAssignmentObject.Member.UserId;
             }
             if (roleAssignmentObject.Member.Users) {
-              for (let roleAssignmentMemberUser of roleAssignmentObject.Member.Users.results) {
+              for (let roleAssignmentMemberUser of roleAssignmentObject.Member.Users) {
                 roleAssignment.Users.push(roleAssignmentMemberUser.Id);
               }
             }
             if (roleAssignmentObject.Member.Groups) {
-              for (let roleAssignmentMemberGroup of roleAssignmentObject.Member.Groups.results) {
+              for (let roleAssignmentMemberGroup of roleAssignmentObject.Member.Groups) {
                 roleAssignment.Groups.push(roleAssignmentMemberGroup.Id);
               }
             }
-            for (let roleDefinitionBinding of roleAssignmentObject.RoleDefinitionBindings.results) {
+            for (let roleDefinitionBinding of roleAssignmentObject.RoleDefinitionBindings) {
               let roleDefinition;
               roleDefinition = {
                 Id: roleDefinitionBinding.Id
