@@ -1,4 +1,4 @@
-import {SPSecurityInfo} from "../spSecurityService";
+import {SPSecurityInfo} from "../SPSecurityService";
 debugger;
 export default class State {
   public selectedPermission: string = "read";

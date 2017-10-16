@@ -5,7 +5,7 @@ import {
 
 } from "@microsoft/sp-client-base";
 
-import {Helpers, SPList, SPSiteUser, SPSiteGroup, SPRoleDefinition}from "../spsecurityService";
+import {Helpers, SPList, SPSiteUser, SPSiteGroup, SPRoleDefinition}from "../SPsecurityService";
 import styles from "../SpSecurityWebpart.module.scss";
 class SPSecurityWebpartTableCell extends React.Component<any, any> {
   public constructor(props) {

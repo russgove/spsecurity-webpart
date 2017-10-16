@@ -200,7 +200,7 @@ export class Helpers {
     return selectedRoleAssignments;
   }
 }
-export default class spSecurityService {
+export default class SPSecurityService {
   public siteUrl: string;
 
   public constructor(siteUrl: string) {

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { css } from "office-ui-fabric-react";
-import spSecurityService from "../spsecurityService";
-import {SPSecurityInfo, SPList}from "../spsecurityService";
+import SPSecurityService from "../SPsecurityService";
+import {SPSecurityInfo, SPList}from "../SPsecurityService";
 import SPSecurityWebpartTableRow from "./SPSecurityWebpartTableRow";
 import styles from "../SpSecurityWebpart.module.scss";
 import { ISpSecurityWebpartWebPartProps } from "../ISpSecurityWebpartWebPartProps";
@@ -14,7 +14,7 @@ export interface ISpSecurityWebpartProps extends ISpSecurityWebpartWebPartProps 
 
 export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpartProps, any> {
 
-  private svc: spSecurityService = new spSecurityService("ss");
+  private svc: SPSecurityService = new SPSecurityService("ss");
   private reduxUnsibsribeFunction;
   private store;
   private self;
@@ -53,7 +53,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
         this.store.dispatch(ActionCreators.expandFolder);// we alreayd have the data so just expand it
       }
       else {
-         let svc2: spSecurityService = new spSecurityService("ss");
+         let svc2: SPSecurityService = new SPSecurityService("ss");
          this.svc.loadFolderRoleAssigmentsDefinitionsMembers(list.title,list.serverRelativeUrl,true).then((response) => {
            this.store.dispatch(ActionCreators.getFolder(list.id, response));
               this.store.dispatch(ActionCreators.expandFolder);// we alreayd have the data so just expand it
@@ -62,7 +62,7 @@ export default class SpSecurityWebpart extends React.Component<ISpSecurityWebpar
     }
 
   }
-  public render():.Element {
+  public render():JSX.Element {
     debugger;
     let folderExpander=this.expandFolder.bind(this);
     return (
